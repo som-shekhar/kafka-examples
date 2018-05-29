@@ -1,0 +1,7 @@
+/Users/ksharma/kafka_2.11-1.1.0/bin/connect-standalone.sh connect-standalone2.properties connect-file-sink.properties
+
+$KAFKA_HOME/bin/kafka-console-producer.sh \
+--broker-list localhost:9092 \
+--topic accounts \
+--property "parse.key=true" \
+--property "key.separator=:"
