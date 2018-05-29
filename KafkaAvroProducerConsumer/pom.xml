@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.xorg.connector</groupId>
+    <artifactId>kafka-avro</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>KafkaFileSinkConnector</name>
+    <url>http://maven.apache.org</url>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <time_stamp>${maven.build.timestamp}</time_stamp>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+        <kafka.artifact>kafka_2.11</kafka.artifact>
+        <kafka.version>1.0.0</kafka.version>
+        <junit.version>4.12</junit.version>
+        <slf4j.version>1.7.6</slf4j.version>
+        <avro.version>1.7.4</avro.version>
+    </properties>
+    
+    <repositories>
+
+  <repository>
+    <id>confluent</id>
+    <url>http://packages.confluent.io/maven/</url>
+  </repository>
+
+  <!-- further repository entries here -->
+
+</repositories>
+	<dependencies>
+
+	  <dependency>
+	    <groupId>io.confluent</groupId>
+	    <artifactId>kafka-avro-serializer</artifactId>
+	    <version>3.1.1</version>
+	  </dependency>
+	  
+	  <dependency>
+    <groupId>org.apache.kafka</groupId>
+    <artifactId>kafka_2.11</artifactId>
+    <!-- For CP 3.1.1 -->
+    <version>0.10.1.0-cp2</version>
+  </dependency>
+
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        
+         <dependency>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro</artifactId>
+        <version>${avro.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro-maven-plugin</artifactId>
+        <version>${avro.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro-compiler</artifactId>
+        <version>${avro.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.avro</groupId>
+      <artifactId>avro-ipc</artifactId>
+      <version>${avro.version}</version>
+    </dependency>
+ </dependencies>
+    
+    <build>
+		<plugins>
+				<plugin>
+		  <groupId>org.apache.avro</groupId>
+		  <artifactId>avro-maven-plugin</artifactId>
+		  <version>${avro.version}</version>
+		  <executions>
+		    <execution>
+		      <phase>generate-sources</phase>
+		      <goals>
+		        <goal>schema</goal>
+		        <goal>protocol</goal>
+		        <goal>idl-protocol</goal>
+		      </goals>
+		       <configuration>
+              <sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
+              <outputDirectory>${project.basedir}/src/main/avro/</outputDirectory>
+              <fieldVisibility>PRIVATE</fieldVisibility>
+            </configuration>
+		    </execution>
+		  </executions>
+		</plugin>
+			<plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-compiler-plugin</artifactId>
+	        <version>3.1</version>
+	        <configuration>
+	          <source>1.8</source>
+	          <target>1.8</target>
+	        </configuration>
+	      </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+                <configuration>
+                    <argLine>-Djava.awt.headless=true</argLine>
+                    <forkMode>pertest</forkMode>
+                </configuration>
+            </plugin>
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>org.eclipse.paho:org.eclipse.paho.client.mqttv3</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <minimizeJar>false</minimizeJar>
+                            <artifactSet />
+
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+		</plugins>
+	</build>
+</project>
