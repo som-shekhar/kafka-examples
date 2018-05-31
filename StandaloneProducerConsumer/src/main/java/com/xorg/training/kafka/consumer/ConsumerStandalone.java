@@ -34,6 +34,7 @@ public class ConsumerStandalone {
 			// topic value Deserializer class
 			configs.setProperty("value.deserializer",
 					StringDeserializer.class.getName());
+			// can run multiple consumer for the same group id
 			configs.setProperty("group.id", "consumerStandalone");
 
 			// topic name
@@ -45,16 +46,17 @@ public class ConsumerStandalone {
 
 			// Creating Kafka Consumer
 			consumer = new KafkaConsumer<String, String>(configs);
+			// subscribe the consumer to the topic
 			consumer.subscribe(topics);
 
 			ConsumerRecords<String, String> consumerRecords;
 			logger.info("Starting consuming from kafka...");
 			while (true) {
-				// Polling data with timeout 2000 milis
+				// Polling data with timeout 2000 ms
 				consumerRecords = consumer.poll(2000);
 				for (ConsumerRecord<String, String> record : consumerRecords) {
-					logger.info("Key {} value {}", record.key(),
-							record.value());
+					logger.info("Received Key {} ,value {},from topic:{} from partition:{} from offset:{}", record.key(),
+							record.value(), record.topic(), record.partition(), record.offset());
 					logger.info("Complete record {} ", record);
 					logger.info("------------ record read --------------");
 				}

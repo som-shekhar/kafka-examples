@@ -36,6 +36,9 @@ public class ProducerStandalone {
 			// Topic name
 			String topic = "transcations";
 
+			/***
+			 * form the record call the producer to send the data to the top
+			 */
 			while (true) {
 				JSONObject transactionValue = getTransactionRecord();
 				ProducerRecord<String, String> record = new ProducerRecord<String, String>(
