@@ -1,0 +1,31 @@
+
+List of topics to be created
+
+employee
+locations
+loc-map
+emp-loc-result
+
+
+$KAFKA_HOME/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic employee
+
+$KAFKA_HOME/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic locations
+
+$KAFKA_HOME/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic loc-map
+
+$KAFKA_HOME/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic emp-loc-result
+
+
+$KAFKA_HOME/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic employee
+
+$KAFKA_HOME/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic locations
+
+
+$KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic loc-map --property print.key=true --property key.separator="-" --from-beginning
+
+
+$KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic  emp-loc-result --property print.key=true --property key.separator="-" --from-beginning
+
+
+
+java -cp target/join-1-0.SNAPSHOT-shaded.jar com.xorg.training.kafka.join.Joiner
