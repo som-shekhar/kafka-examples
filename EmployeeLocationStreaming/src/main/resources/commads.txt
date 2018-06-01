@@ -24,7 +24,7 @@ $KAFKA_HOME/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic l
 $KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic loc-map --property print.key=true --property key.separator="-" --from-beginning
 
 
-$KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic  emp-loc-result --property print.key=true --property key.separator="-" --from-beginning
+$KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic  emp-loc-result  --property key.separator="-" --from-beginning
 
 
 
